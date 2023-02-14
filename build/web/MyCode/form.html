@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=`, initial-scale=1.0" />
+        <title>JQUERY VALIDATION PLUGIN</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+
+        <style>
+            .error {
+                color: red;
+            }
+
+            .c1 {
+                border: 2px red ridge;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 mx-auto">
+                    <form action="" id="form1" class="mt-3">
+                        <input type="text" name="myName" id="myName" placeholder="Enter your name" class="form-control"
+                            autocomplete="off" />
+                        <br />
+                        <input type="email" name="email" id="email" placeholder="Enter your email" class="form-control"
+                            autocomplete="off" />
+                        <br />
+                        <input type="password" name="password" id="password" placeholder="Enter your password"
+                            class="form-control" />
+                        <br />
+                        <input type="password" name="cpassword" id="cpassword" placeholder="Re-Enter password"
+                            class="form-control" />
+                        <br />
+                        <input type="text" name="fname" id="fname" placeholder="Enter first name"
+                        class="form-control" autocomplete="off"/>
+                    <br />
+                    <input type="text" name="ltr" id="ltr" placeholder="Enter letters only"
+                        class="form-control" autocomplete="off"/>
+                    <br />
+                    <input type="text" name="alpha" id="alpha" placeholder="Enter alphabets and numbers"
+                        class="form-control" autocomplete="off"/>
+                    <br />
+                    <input type="text" name="punc" id="punc" placeholder="Enter alphabets with basic punc"
+                        class="form-control" autocomplete="off"/>
+                    <br />
+                    <input type="url" name="url" id="url" placeholder="Enter url"
+                    class="form-control" autocomplete="off"/>
+                <br />
+
+                <input type="hidden" name="data" id="data" value="5"/>
+
+                <input type="text" name="num1" id="num1" placeholder="Enter a number"
+                    class="form-control" autocomplete="off"/>
+                <br />
+
+                <fieldset>
+                    <legend>Gender:</legend>
+                    <input type="radio" name="gender[]" value="Male">
+                    Male <br>
+                    <input type="radio" name="gender[]" value="Female">
+                    Female <br>
+                    <label for="gender[]" class="error" style="display: none;"></label>
+                </fieldset>
+                <br/>
+
+                <input type="checkbox" name="check" id="check">
+                Accept the terms and conditions
+                <br>
+                <label for="check" class="error" style="display: none;"></label>
+                <br>
+
+                        <input type="submit" value="submit" class="btn btn-info mt-1 form-control" />
+                    </form>
+
+                    <h2 id="summary"></h2>
+                </div>
+                
+            </div>
+        </div>
+
+        <script src="jquery.js"></script>
+
+        <script src="jquery-validation-1.19.5/dist/jquery.validate.min.js"></script> 
+
+        <script src="jquery-validation-1.19.5/dist/additional-methods.min.js"></script>
+
+        <script src="js/bootstrap.min.js"></script>
+
+        
+
+        <script>
+            $(document).ready(function () {
+
+                //strong password method
+                $.validator.addMethod("strongPassword",function(value){
+                    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value);
+                },"Password must contain uppercase,lowercase and symbol");
+
+
+
+                $("#form1").validate({
+                    rules: {
+                        myName: {
+                            required: true,
+                            minlength: 5,
+                        },
+                        email: {
+                            required: true,
+                            email: true,
+                        },
+                        password:{
+                            required:true,
+                            strongPassword:true
+                            
+                        },
+                        cpassword:{
+                            required:true,
+                            equalTo: '#password'
+                        },
+                        fname:{
+                            required:true,
+                            nowhitespace:true
+                        },
+                        ltr:{
+                            required:true,
+                            lettersonly:true
+                        },
+                        alpha:{
+                            required:true,
+                            alphanumeric:true
+                        },
+                        punc:{
+                            required:true,
+                            letterswithbasicpunc:true
+                        },
+                        url:{
+                            required:true,
+                            url:true
+                        },
+                        num1:{
+                            required:true,
+                            // lessThan:"#data"
+                            // lessThanEqual:"#data"
+                            // greaterThan:"#data"
+                            greaterThanEqual:"#data"
+                        },
+                        'gender[]':{
+                            required:true
+                        },
+                        check:{
+                            required:true
+                        }
+                    },
+                    highlight: function (element) {
+                        $(element).addClass("c1");
+                    },
+                    unhighlight: function (element) {
+                        $(element).removeClass("c1");
+                    },
+                    invalidHandler:function(element){
+                        var validator = $('#form1').validate();
+                        $("#summary").text(validator.numberOfInvalids()+" fields are invalid....");
+                    },
+                    messages: {
+                        myName: {
+                            required: "Name is mandatory",
+                            minlength: "enter atleast five characters",
+                        },
+                        email: {
+                            required: "email is required",
+                            email: "Enter valid Email",
+                        },
+                        password:{
+                            required:"password is mandatory",
+
+                        },
+                        cpassword:{
+                            required:'password is mandatory',
+                            equalTo: 'both password must be equal'
+                        },
+                        num1:{
+                            lessThan: "Please Enter less than 5"
+                        }
+                    },
+                });
+            });
+        </script>
+    </body>
+</html>
